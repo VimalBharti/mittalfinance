@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxthub/core": "0.8.17",
     "chart.js": "^4.4.8",
     "date-fns": "^4.1.0",
     "nuxt": "^3.15.4",
@@ -23,6 +24,7 @@
     "@iconify-json/material-symbols": "^1.2.14",
     "@iconify-json/solar": "^1.2.2",
     "@nuxt/ui": "^2.21.0",
-    "@nuxtjs/supabase": "^1.4.6"
+    "@nuxtjs/supabase": "^1.4.6",
+    "wrangler": "^3.111.0"
   }
 }
