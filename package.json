@@ -1,0 +1,28 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.8",
+    "date-fns": "^4.1.0",
+    "nuxt": "^3.15.4",
+    "v-calendar": "^3.1.2",
+    "vue": "latest",
+    "vue-chartjs": "^5.3.2",
+    "vue-router": "latest"
+  },
+  "packageManager": "pnpm@8.10.2+sha1.e0b68270e89c817ff88b7be62466a2128c53af02",
+  "devDependencies": {
+    "@iconify-json/material-symbols": "^1.2.14",
+    "@iconify-json/solar": "^1.2.2",
+    "@nuxt/ui": "^2.21.0",
+    "@nuxtjs/supabase": "^1.4.6"
+  }
+}
