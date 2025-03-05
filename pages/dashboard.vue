@@ -172,10 +172,10 @@
         const endDate = new Date(year, monthNumber, 0).toISOString().split('T')[0]  // Last day of the month
         
         const { count: total, error } = await supabase
-            .from('clients')
+            .from('loans')
             .select('*', { count: 'exact', head: true }) // Get count without fetching data
-            .gte('salaryCreditDate', startDate)
-            .lte('salaryCreditDate', endDate)
+            .gte('salary_credit_date', startDate)
+            .lte('salary_credit_date', endDate)
 
         if (error) {
             console.error('Error fetching data:', error)
@@ -188,10 +188,10 @@
         const endDate = new Date(year, secondMonthNumber, 0).toISOString().split('T')[0]  // Last day of the month
         
         const { count: total, error } = await supabase
-            .from('clients')
+            .from('loans')
             .select('*', { count: 'exact', head: true }) // Get count without fetching data
-            .gte('salaryCreditDate', startDate)
-            .lte('salaryCreditDate', endDate)
+            .gte('salary_credit_date', startDate)
+            .lte('salary_credit_date', endDate)
 
         if (error) {
             console.error('Error fetching data:', error)
@@ -204,10 +204,10 @@
         const endDate = new Date(year, thirdMonthNumber, 0).toISOString().split('T')[0]  // Last day of the month
         
         const { count: total, error } = await supabase
-            .from('clients')
+            .from('loans')
             .select('*', { count: 'exact', head: true }) // Get count without fetching data
-            .gte('salaryCreditDate', startDate)
-            .lte('salaryCreditDate', endDate)
+            .gte('salary_credit_date', startDate)
+            .lte('salary_credit_date', endDate)
 
         if (error) {
             console.error('Error fetching data:', error)
