@@ -18,16 +18,20 @@
               <!-- Payments -->
               <NuxtLink class="py-3 px-6 flex items-center gap-2 text-sm hover:bg-gray-200 sidebar-link">
                   <Icon name="streamline:bag-rupee" class="w-5 h-5 text-gray-700" />
-                  Payments
+                  Loans
               </NuxtLink>
                 <div class="nested-link">
-                    <NuxtLink to="/" class="py-3 px-6 flex items-center gap-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-600 sidebar-link">
+                    <NuxtLink to="/loans" class="py-3 px-6 flex items-center gap-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-600 sidebar-link">
                         <Icon name="tabler:receipt-rupee" class="w-5 h-5" />
-                        Payments History
+                        Loan History
                     </NuxtLink>
                     <NuxtLink to="/" class="py-3 px-6 flex items-center gap-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-600 sidebar-link">
                         <Icon name="hugeicons:bubble-chat-delay" class="w-5 h-5" />
-                        Delayed Payment
+                        Delayed EMI
+                    </NuxtLink>
+                    <NuxtLink to="/loans/new" class="py-3 px-6 flex items-center gap-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-600 sidebar-link">
+                        <Icon name="hugeicons:save-money-dollar" class="w-5 h-5" />
+                        Add New Loan
                     </NuxtLink>
                 </div>
 
