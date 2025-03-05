@@ -166,7 +166,7 @@
   const address = ref('');
 
   const imageFile = ref(null)
-  const imageUrl = ref('https://hozukjgrfvcuvdtakkte.supabase.co/storage/v1/object/public/website/avatar/avatar.png')
+  const imageUrl = ref('https://hozukjgrfvcuvdtakkte.supabase.co/storage/v1/object/public/website/avatar/avatar.jpg')
   const isUploading = ref(false)
 
   // Handle file selection

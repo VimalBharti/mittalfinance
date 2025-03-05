@@ -24,7 +24,7 @@
         <div class="w-full">
           <!-- Card -->
           <div class="flex flex-col">
-            <div class="-m-1.5 overflow-x-auto">
+            <div class="">
               <div class="p-1.5 min-w-full inline-block align-middle">
                 <div class="bg-white overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
                   <!-- Header -->
@@ -187,27 +187,27 @@
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
                           <button class="block p-4">
-                            <span class="block text-sm text-gray-800 dark:text-neutral-200">Client name</span>
-                          </button>
-                        </td>
-                        <td class="size-px whitespace-nowrap align-center">
-                          <button class="block p-4">
-                            {{loan.loan_amount}}
-                          </button>
-                        </td>
-                        <td class="size-px whitespace-nowrap align-center">
-                          <button class="block p-4">
-                            <span class="block text-sm text-gray-500 dark:text-neutral-500">₹ {{loan.interest_rate}}</span>
-                          </button>
-                        </td>
-                        <td class="size-px whitespace-nowrap align-center">
-                          <button class="block p-4">
-                            <span class="text-sm text-gray-600 dark:text-neutral-400">{{loan.loan_tenure}}</span>
+                            <span class="block text-sm text-gray-800 dark:text-neutral-200">{{ loan.clients.fullName }}</span>
                           </button>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
                           <button class="block p-4 text-sm">
-                            ₹ {{ loan.salary_credit_date }}
+                            ₹ {{loan.loan_amount}}
+                          </button>
+                        </td>
+                        <td class="size-px whitespace-nowrap align-center">
+                          <button class="block p-4">
+                            <span class="block text-sm text-gray-500 dark:text-neutral-500">{{loan.interest_rate}}% (per month)</span>
+                          </button>
+                        </td>
+                        <td class="size-px whitespace-nowrap align-center">
+                          <button class="block p-4">
+                            <span class="text-sm text-gray-600 dark:text-neutral-400">{{loan.loan_tenure}} Months</span>
+                          </button>
+                        </td>
+                        <td class="size-px whitespace-nowrap align-center">
+                          <button class="block p-4 text-sm">
+                            {{ loan.salary_credit_date }}
                           </button>
                         </td>
                       </tr>
@@ -253,74 +253,78 @@
         </div>
         <!-- End Table Section -->
 
-        <USlideover v-model="isOpen">
-          <div class="p-4 flex-1">
-            <UButton
-              color="gray"
-              variant="ghost"
-              size="sm"
-              icon="i-heroicons-x-mark-20-solid"
-              class="flex sm:hidden absolute end-5 top-5 z-10"
-              square
-              padded
-              @click="isOpen = false"
-            />
-            <UCard>
-              <!-- List Group -->
-              <ul class="mt-3 flex flex-col">
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
+        <UModal v-model="isOpen">
+
+          <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+            <template #header>
+              <div class="flex items-center justify-between">
+                <h2 class="font-bold text-center">Loan Details</h2>
+                <button @click="isOpen = false">
+                  <Icon name="material-symbols:close" class="w-5 h-5" />
+                </button>
+              </div>
+            </template>
+
+            <div class="bg-white ">
+              <div class="header flex items-center justify-between mb-3">
+                <img :src="client.photo" class="h-20 w-20 rounded-xl object-cover" />
+                <h2 class="font-bold text-center capitalize">{{ client.fullName }}</h2>
+              </div>
+              <ul class="mt-3 flex flex-col text-xs">
+                <li class="inline-flex items-center gap-x-2 py-3 px-4 border bg-gray-50 border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
                   <div class="flex items-center justify-between w-full">
                     <span>File Number</span>
                     <span>{{ singleLoan.serial_number }}</span>
                   </div>
                 </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
+                <li class="inline-flex items-center gap-x-2 py-3 px-4 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
                   <div class="flex items-center justify-between w-full">
                     <span>Loan Amount</span>
-                    <span>{{ singleLoan.loan_amount }}</span>
+                    <span>₹ {{ singleLoan.loan_amount }}</span>
                   </div>
                 </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
+                <li class="inline-flex items-center gap-x-2 py-3 px-4 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
                   <div class="flex items-center justify-between w-full">
                     <span>Interest Rate</span>
-                    <span>{{ singleLoan.interest_rate }}</span>
+                    <span>{{ singleLoan.interest_rate }}%</span>
                   </div>
                 </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
+                <li class="inline-flex items-center gap-x-2 py-3 px-4 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800">
                   <div class="flex items-center justify-between w-full">
                     <span>Loan Tenure</span>
-                    <span>{{ singleLoan.loan_tenure }}</span>
+                    <span>{{ singleLoan.loan_tenure }} Months</span>
                   </div>
                 </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
+                <li class="inline-flex items-center gap-x-2 py-3 px-4 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800">
                   <div class="flex items-center justify-between w-full">
                     <span>EMI Amount</span>
-                    <span>{{ singleLoan.emi_amount }}</span>
+                    <span>₹ {{ singleLoan.emi_amount }}</span>
                   </div>
                 </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
+                <li class="inline-flex items-center gap-x-2 py-3 px-4 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800">
                   <div class="flex items-center justify-between w-full">
                     <span>EMI Start Date</span>
                     <span>{{ singleLoan.emi_start_date }}</span>
                   </div>
                 </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
+                <li class="inline-flex items-center gap-x-2 py-3 px-4 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800">
                   <div class="flex items-center justify-between w-full">
                     <span>Last EMI Date</span>
                     <span>{{ singleLoan.last_emi_date }}</span>
                   </div>
                 </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
+                <li class="inline-flex items-center gap-x-2 py-3 px-4 border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800">
                   <div class="flex items-center justify-between w-full">
                     <span>Salary Credit Date</span>
                     <span>{{ singleLoan.salary_credit_date }}</span>
                   </div>
                 </li>
               </ul>
-              <!-- End List Group -->
-            </UCard>
-          </div>
-        </USlideover>
+            </div>
+
+          </UCard>
+        </UModal>
+
       </div>
     </template>    
 
@@ -343,31 +347,7 @@
   const isOpen = ref(false)
 
   const singleLoan = ref()
-
-  const columns = [{
-    key: 'serialnumber',
-    label: 'Sr no.'
-  }, {
-    key: 'fullName',
-    label: 'Name'
-  }, {
-    key: 'phone',
-    label: 'Phone'
-  }, {
-    key: 'loanAmount',
-    label: 'Loan Amount'
-  }, {
-    key: 'loanTenure',
-    label: 'Loan Tenure'
-  }, {
-    key: 'emiStartDate',
-    label: 'Loan Start'
-  }, {
-    key: 'salaryCreditDate',
-    label: 'Salary Credit Date'
-  }, {
-    key: 'role'
-  }]
+  const client = ref()
 
   const fetchRecords = async () => {
 
@@ -376,7 +356,7 @@
     
     const { data, error } = await supabase
       .from('loans')
-      .select('*')
+      .select('*, clients(fullName)')
       .gte('salary_credit_date', startDate)
       .lte('salary_credit_date', endDate)
 
@@ -391,10 +371,11 @@
   const singleLoanDetail = async (select) => {
     let { data: loan, error } = await supabase
       .from('loans')
-      .select("*")
+      .select('*, clients(fullName, photo)')
       .eq('id', select.id)
       .single()
 
+    client.value = loan.clients
     singleLoan.value = loan
     isOpen.value = true
   }

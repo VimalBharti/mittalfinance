@@ -84,7 +84,8 @@
                     <h3 class="text-2xl font-bold text-gray-800">{{ quick.value }}</h3>
                 </div>
                 <button class="border rounded-full w-10 h-10  text-gray-800 flex items-center justify-center">
-                    <Icon :name="quick.icon" class="w-5 h-5" /></button>
+                    <Icon :name="quick.icon" class="w-5 h-5" />
+                </button>
             </div>
         </section>
         <section>
@@ -113,10 +114,11 @@
     const supabase = useSupabaseClient()
 
     const totalLoanAmount = ref(0)
+    const totalClient = ref(0)
 
     const quicks = [
         { title: 'Total Loan Amount', value: totalLoanAmount, icon: 'material-symbols:currency-rupee' },
-        { title: 'Total Clients', value: '300', icon: 'solar:users-group-rounded-linear' },
+        { title: 'Total Clients', value: totalClient, icon: 'solar:users-group-rounded-linear' },
         { title: 'Documents', value: '240', icon: 'material-symbols:file-copy-outline' },
         { title: 'Defaulters ', value: '12', icon: 'streamline:interface-user-block-actions-block-close-denied-deny-geometric-human-person-single-up-user' },
     ]
@@ -155,16 +157,21 @@
 
     const fetchTotalLoanAmount = async () => {
         const { data, error } = await supabase
-            .from('clients')
-            .select('loanAmount')
+            .from('loans')
+            .select('loan_amount')
 
         if (error) {
             console.error('Error fetching loan amount:', error)
             return
         }
 
+        const { count: total } = await supabase
+            .from('clients')
+            .select('*', { count: 'exact', head: true }) // Get count without fetching data
+        totalClient.value = total;
+
         // Calculate sum of "loan_amount"
-        totalLoanAmount.value = data.reduce((sum, record) => sum + (record.loanAmount || 0), 0)
+        totalLoanAmount.value = data.reduce((sum, record) => sum + (record.loan_amount || 0), 0)
     }
 
     const fetchCurrentMonth = async () => {
