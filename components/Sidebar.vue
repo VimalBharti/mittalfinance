@@ -55,6 +55,11 @@
                   <Icon name="solar:document-add-line-duotone" class="w-5 h-5 text-gray-700" />
                   Documents
               </NuxtLink>
+
+              <NuxtLink to="/reset-setting" class="py-3 px-6 flex items-center gap-2 text-sm hover:bg-gray-200 sidebar-link">
+                  <Icon name="mdi:lock-reset" class="w-5 h-5 text-gray-700" />
+                  Reset Setting
+              </NuxtLink>
           </nav>
       </aside>
   </template>

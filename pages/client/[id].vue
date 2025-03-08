@@ -85,6 +85,7 @@
             <UAccordion
               :items="actions"
               size="md"
+              variant="soft"
               color="gray"
             >
               <!-- previous-emi -->
@@ -107,45 +108,71 @@
               <template #add-emi>
                 <div class="text-gray-900">
                   <div class="grid grid-cols-1 gap-4">
-                    <div class="w-full flex items-center gap-2">
-                      <span class="w-full block text-sm text-gray-700 font-medium">
-                        Select Month
-                      </span>
-                      <UInput v-model="date" type="date" size="lg" />
-                    </div>
-                    <div class="w-full flex items-center gap-2">
-                      <span class="w-full block text-sm text-gray-700 font-medium">
-                        EMI <br/> <span class="text-xs text-gray-400">(Amount + Interest)</span>
-                      </span>
-                      <input type="text" class="py-2 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none border" placeholder="EMI + Interest" v-model="emi">
-                    </div>
-                    <div class="w-full flex items-center gap-2">
-                      <span class="w-full block text-sm text-gray-700 font-medium">
-                        Only Interest
-                      </span>
-                      <input type="text" class="py-2 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none border" placeholder="Only Interest" v-model="interest">
-                    </div>
-                    <div class="w-full flex items-center gap-2">
-                      <span class="w-full block text-sm text-gray-700 font-medium">
-                        Status
-                      </span>
-                      <UToggle
-                        on-icon="i-heroicons-check-20-solid"
-                        off-icon="i-heroicons-x-mark-20-solid"
-                        :model-value="false"
-                        v-model="status"
-                      />
-                    </div>
-                    <div class="w-full flex items-center gap-2">
-                      <span class="w-full block text-sm text-gray-700 font-medium">
-                        Last EMI Date
-                      </span>
-                      <input type="date" v-model="newLastEmiDate" class="w-full border rounded-md shadow-sm py-1.5 px-2 text-sm">
-                    </div>
+                    
+                    <section class="grid grid-cols-2 gap-4">
+                      <div class="w-full">
+                        <span class="w-full block text-sm text-gray-700 font-medium">
+                          Select Month
+                        </span>
+                        <UInput v-model="date" type="date" size="lg" />
+                      </div>
+                      <!-- EMI -->
+                      <div class="w-full">
+                        <span class="w-full block text-sm text-gray-700 font-medium">
+                          EMI <span class="ml-1 text-xs text-gray-400">(Amount + Interest)</span>
+                        </span>
+                        <input type="text" class="py-2 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none border" placeholder="EMI + Interest" v-model="emi">
+                      </div>
+                    </section>
+
+                    <section class="grid grid-cols-2 gap-4">
+                      <!-- Status for EMI or Not-->
+                      <div class="w-full">
+                        <span class="w-full block text-sm text-gray-700 font-medium">
+                          Enable/Disable
+                        </span>
+                        <div class="w-full flex items-center gap-2 border py-2 px-4 rounded-lg">
+                          <span class="w-full block text-sm text-gray-700 font-medium">
+                            Paying Full Amount
+                          </span>
+                          <UToggle
+                            on-icon="i-heroicons-check-20-solid"
+                            off-icon="i-heroicons-x-mark-20-solid"
+                            :model-value="false"
+                            v-model="status"
+                          />
+                        </div>
+                      </div>
+                      <!-- Monthly Status  -->
+                      <div class="w-full">
+                        <span class="w-full block text-sm text-gray-700 font-medium">
+                          Next Month Salary Date
+                        </span>
+                        <UInput v-model="loan.salary_credit_date" type="date" size="lg" />
+                      </div>
+                    </section>
+
+                    <section class="grid grid-cols-2 gap-4" v-if="status === false">
+                      <!-- Interest -->
+                      <div class="w-full">
+                        <span class="w-full block text-sm text-gray-700 font-medium">
+                          Only Interest
+                        </span>
+                        <input type="text" class="py-2 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none border" placeholder="Enter Interest amount" v-model="interest">
+                      </div>
+                      <!-- Last EMI date -->
+                      <div class="w-full">
+                        <span class="w-full block text-sm text-gray-700 font-medium">
+                          Last EMI Date
+                        </span>
+                        <input type="date" v-model="newLastEmiDate" class="w-full border rounded-md shadow-sm py-1.5 px-2 text-sm">
+                      </div>
+                    </section>
+                    
                     <UButton 
                       :loading="isSaving" 
                       :color="saveBtnColor" 
-                      @click="addEmiToLoan(loan.id)" 
+                      @click="addEmiToLoan(loan)" 
                       block 
                       :trailing="false"
                       icon="proicons:save"
@@ -164,6 +191,7 @@
 </template>
 
 <script setup>
+
   definePageMeta({
     layout: 'dashboard',
     colorMode: 'light',
@@ -200,6 +228,7 @@
   }]
 
   const client = ref()
+  const monthly_status = ref(true)
 
   const loans = ref([])
   const loansCount = ref(null)
@@ -214,7 +243,7 @@
   const date = ref()
   const emi = ref()
   const interest = ref()
-  const status = ref()
+  const status = ref(true)
 
   const fetchRecords = async () => {
     isLoading.value = true
@@ -245,7 +274,7 @@
     pending.value = false
   }
 
-  const addEmiToLoan = async (id) => {
+  const addEmiToLoan = async (event) => {
     isSaving.value = true;
     saveBtnColor.value = 'gray';
 
@@ -253,7 +282,7 @@
       .from('installments')
       .insert([
         { 
-          loan_id : id,
+          loan_id : event.id,
           date : date.value,
           emi : emi.value,
           interest : interest.value,
@@ -262,7 +291,7 @@
       ])
       .select()
 
-      updateSelectedLoan(id);
+      updateSelectedLoan(event);
 
       isSaving.value = false;
       saveBtnColor.value = 'cyan';
@@ -276,11 +305,11 @@
   
 
   // Update Loan Last EMI Date
-  const updateSelectedLoan = async (id) => {
+  const updateSelectedLoan = async (event) => {
     await supabase
       .from('loans')
-      .update({ last_emi_date: newLastEmiDate.value })
-      .eq('id', id)
+      .update({ last_emi_date: newLastEmiDate.value, emi_monthly_status: monthly_status.value, salary_credit_date: event.salary_credit_date })
+      .eq('id', event.id)
 
     newLastEmiDate.value = ''
     

@@ -9,38 +9,24 @@
     </header>
 
     <!-- Current Status -->
-    <!-- <div class="grid grid-cols-2 gap-5 mt-12 mb-5">
-        <section class="border rounded-xl p-5">
-            <h3 class="font-bold text-gray-700 uppercase text-sm">Clients</h3>
-            <ul class="w-full flex flex-col bg-white mt-2">
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-                    ABC
-                </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-                    DEF
-                </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-                    GHI
-                </li>
-            </ul>
+    <div class="grid grid-cols-2 gap-5 p-6">
+        <section class="border rounded-xl overflow-hidden border-green-100 max-h-[300px]">
+            <h3 class="font-bold bg-green-50 border-b border-green-200 text-sm text-green-500 p-3 flex items-center gap-2">
+                <Icon name="material-symbols:check-circle-outline" class="w-6 h-6" />
+                {{ currentMonthName }} - Received Payments
+            </h3>
+            <UTable :columns="columns" :rows="recievedLoans" class="text-sm" />
         </section>
-        <section class="border rounded-xl p-5">
-            <h3 class="font-bold text-gray-700 uppercase text-sm">Payments</h3>
-            <ul class="w-full flex flex-col bg-white mt-2">
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-                    3000
-                </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-                    2000
-                </li>
-                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-                    1200
-                </li>
-            </ul>
+        <section class="border rounded-xl overflow-hidden border-red-100 max-h-[300px]">
+            <h3 class="font-bold bg-red-50 border-b border-red-200 text-sm text-red-500 p-3 flex items-center gap-2">
+                <Icon name="ic:outline-cancel" class="w-6 h-6" />
+                {{ currentMonthName }} - Pending Payments
+            </h3>
+            <UTable :columns="columns" :rows="pendingLoans"  class=""/>
         </section>
-    </div> -->
+    </div>
     
-    <div class="grid grid-cols-3 gap-5 p-6">
+    <div class="grid grid-cols-3 gap-5 px-6 mb-6">
         <section 
             class="rounded-xl p-8 text-gray-800" 
             :style="{'background-color':bgColors[0]}"
@@ -76,7 +62,7 @@
         </section>
     </div>
 
-    <div class="grid grid-cols-2 gap-5 px-6">
+    <div class="grid grid-cols-2 gap-5 px-6 mb-6">
         <section class="grid grid-cols-2 gap-5">
             <div class="flex justify-between border rounded-xl p-5" v-for="quick in quicks" :key="quick">
                 <div class="space-y-3">
@@ -123,6 +109,20 @@
         { title: 'Defaulters ', value: '12', icon: 'streamline:interface-user-block-actions-block-close-denied-deny-geometric-human-person-single-up-user' },
     ]
 
+    // Table Columns
+    const columns = [{
+        key: 'file_number',
+        label: 'File No.'
+    }, {
+        key: 'client_name',
+        label: 'Client name'
+    }, {
+        key: 'emi_amount',
+        label: 'EMI Amount'
+    }]
+
+    const currentMonthName = new Date().toLocaleString("en-US", { month: "long" })
+
     const currentDate = new Date()
     const year = currentDate.getFullYear()
 
@@ -148,6 +148,10 @@
     const currentCount = ref(0)
     const secondMonthCount = ref(0)
     const thirdMonthCount = ref(0)
+
+    const recievedLoans = ref([])
+    const pendingLoans = ref([])
+    const isLoading = ref(true)
 
     const currentMonth = months.find(m => m.number === monthNumber)
     const secondMonth = months.find(m => m.number === secondMonthNumber)
@@ -222,11 +226,54 @@
             thirdMonthCount.value = total
         }
     }
+
+    const fetchLoans = async () => {
+        fetchReceivedLoans(),
+        fetchPendingLoans()
+    }
+    const fetchReceivedLoans = async () => {
+        const startDate = `${year}-${monthNumber}-01`
+        const endDate = new Date(year, monthNumber, 0).toISOString().split('T')[0]  // Last day of the month
+
+        const { data, error } = await supabase
+            .from('loans')
+            .select('*')
+            .eq('emi_monthly_status', true)
+            .gte('salary_credit_date', startDate)
+            .lte('salary_credit_date', endDate)
+
+        if (error) {
+            console.error('Error fetching data:', error)
+        } else {
+            recievedLoans.value = data
+            isLoading.value = false
+        }
+    }
+    const fetchPendingLoans = async () => {
+        const startDate = `${year}-${monthNumber}-01`
+        const endDate = new Date(year, monthNumber, 0).toISOString().split('T')[0]  // Last day of the month
+
+        const { data, error } = await supabase
+            .from('loans')
+            .select('*')
+            .eq('emi_monthly_status', false)
+            .gte('salary_credit_date', startDate)
+            .lte('salary_credit_date', endDate)
+
+        if (error) {
+            console.error('Error fetching data:', error)
+        } else {
+            pendingLoans.value = data
+            isLoading.value = false
+        }
+    }
+
     onMounted(
         fetchCurrentMonth(), 
         fetchSecondMonth(), 
         fetchThirdMonth(), 
-        fetchTotalLoanAmount()
+        fetchTotalLoanAmount(),
+        fetchLoans()
     )
 
 </script>
