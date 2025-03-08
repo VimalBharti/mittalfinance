@@ -56,6 +56,16 @@
 
               <!-- Full Name -->
               <div class="sm:col-span-3">
+                <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200 uppercase font-bold">
+                  File Number
+                </label>
+              </div>
+              <div class="sm:col-span-9">
+                <input type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="File Number" v-model="file_number">
+              </div>
+
+              <!-- Full Name -->
+              <div class="sm:col-span-3">
                 <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
                   Full name
                 </label>
@@ -164,6 +174,7 @@
   const phone = ref('');
   const gender = ref('');
   const address = ref('');
+  const file_number = ref('');
 
   const imageFile = ref(null)
   const imageUrl = ref('https://hozukjgrfvcuvdtakkte.supabase.co/storage/v1/object/public/website/avatar/avatar.jpg')
@@ -212,6 +223,7 @@
       .insert([
         { 
           fname : fname.value,
+          file_number : file_number.value,
           lname : lname.value,
           fullName : fname.value + ' ' + lname.value,
           email : email.value,
@@ -229,6 +241,7 @@
       // Reset values
       fname.value = '';
       lname.value = '';
+      file_number.value = '';
       email.value = '';
       phone.value = '';
       gender.value = '';

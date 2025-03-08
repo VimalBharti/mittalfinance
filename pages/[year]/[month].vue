@@ -178,37 +178,36 @@
                       <tr 
                         class="bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800 cursor-pointer"
                         v-for="loan in loans" :key="loan"
-                        @click="singleLoanDetail(loan)"
                       >
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block p-4">
-                            <span class="block text-sm text-gray-800 dark:text-neutral-200">{{loan.serial_number}}</span>
-                          </button>
+                          <NuxtLink :to="`/client/${loan.client_id}`" class="block p-4">
+                            <span class="block text-sm text-gray-800 dark:text-neutral-200">{{loan.client_id}}</span>
+                          </NuxtLink>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block p-4">
-                            <span class="block text-sm text-gray-800 dark:text-neutral-200">{{ loan.clients.fullName }}</span>
-                          </button>
+                          <NuxtLink :to="`/client/${loan.client_id}`" class="block p-4">
+                            <span class="block text-sm text-gray-800 dark:text-neutral-200">{{ loan.client_name }}</span>
+                          </NuxtLink>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block p-4 text-sm">
+                          <NuxtLink :to="`/client/${loan.client_id}`" class="block p-4 text-sm">
                             ₹ {{loan.loan_amount}}
-                          </button>
+                          </NuxtLink>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block p-4">
+                          <NuxtLink :to="`/client/${loan.client_id}`" class="block p-4">
                             <span class="block text-sm text-gray-500 dark:text-neutral-500">{{loan.interest_rate}}% (per month)</span>
-                          </button>
+                          </NuxtLink>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block p-4">
+                          <NuxtLink :to="`/client/${loan.client_id}`" class="block p-4">
                             <span class="text-sm text-gray-600 dark:text-neutral-400">{{loan.loan_tenure}} Months</span>
-                          </button>
+                          </NuxtLink>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block p-4 text-sm">
+                          <NuxtLink :to="`/client/${loan.client_id}`" class="block p-4 text-sm">
                             {{ loan.salary_credit_date }}
-                          </button>
+                          </NuxtLink>
                         </td>
                       </tr>
 
@@ -267,8 +266,8 @@
 
             <div class="bg-white ">
               <div class="header flex items-center justify-between mb-3">
-                <img :src="client.photo" class="h-20 w-20 rounded-xl object-cover" />
-                <h2 class="font-bold text-center capitalize">{{ client.fullName }}</h2>
+                <img :src="singleLoan.photo" class="h-20 w-20 rounded-xl object-cover" />
+                <h2 class="font-bold text-center capitalize">{{ singleLoan.client_name }}</h2>
               </div>
               <ul class="mt-3 flex flex-col text-xs">
                 <li class="inline-flex items-center gap-x-2 py-3 px-4 border bg-gray-50 border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
@@ -356,7 +355,7 @@
     
     const { data, error } = await supabase
       .from('loans')
-      .select('*, clients(fullName)')
+      .select('*')
       .gte('salary_credit_date', startDate)
       .lte('salary_credit_date', endDate)
 
@@ -371,7 +370,7 @@
   const singleLoanDetail = async (select) => {
     let { data: loan, error } = await supabase
       .from('loans')
-      .select('*, clients(fullName, photo)')
+      .select('*')
       .eq('id', select.id)
       .single()
 

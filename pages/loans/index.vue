@@ -182,12 +182,12 @@
                       >
                         <td class="size-px whitespace-nowrap align-center">
                           <button class="block p-4">
-                            <span class="block text-sm text-gray-800 dark:text-neutral-200">{{loan.serial_number}}</span>
+                            <span class="block text-sm text-gray-800 dark:text-neutral-200">{{loan.file_number}}</span>
                           </button>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
                           <button class="block p-4">
-                            <span class="block text-sm text-gray-800 dark:text-neutral-200">{{ loan.clients.fullName }}</span>
+                            <span class="block text-sm text-gray-800 dark:text-neutral-200">{{loan.client_name}}</span>
                           </button>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
@@ -267,8 +267,8 @@
 
             <div class="bg-white ">
               <div class="header flex items-center justify-between mb-3">
-                <img :src="client.photo" class="h-20 w-20 rounded-xl object-cover" />
-                <h2 class="font-bold text-center capitalize">{{ client.fullName }}</h2>
+                <img :src="singleLoan.client_photo" class="h-20 w-20 rounded-xl object-cover" />
+                <h2 class="font-bold text-center capitalize">{{ singleLoan.client_name }}</h2>
               </div>
               <ul class="mt-3 flex flex-col text-xs">
                 <li class="inline-flex items-center gap-x-2 py-3 px-4 border bg-gray-50 border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
@@ -348,9 +348,10 @@
   const isOpen = ref(false)
 
   const fetchRecords = async () => {
+    // fetch all laons
     const { data, error } = await supabase
       .from('loans')
-      .select('*, clients(fullName)')
+      .select('*')
 
     if (error) {
       console.error('Error fetching data:', error)
@@ -363,11 +364,9 @@
   const singleLoanDetail = async (select) => {
     let { data: loan, error } = await supabase
       .from('loans')
-      .select('*, clients(fullName, photo)')
+      .select('*')
       .eq('id', select.id)
       .single()
-
-    // console.log(loan)
 
     client.value = loan.clients
     singleLoan.value = loan

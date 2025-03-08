@@ -5,7 +5,7 @@
           <div class="header p-4 text-white">{{ month.name }}</div>
           <div class="body rounded-xl bg-white h-44 p-4 flex flex-col items-center justify-center">
             <h2 class="text-3xl font-bold">22 Clients</h2>
-            <NuxtLink to="`/${year}/${monthNumber}`" class="text-right w-full flex items-center justify-center gap-1 group text-xs uppercase mt-8">
+            <NuxtLink to="/" class="text-right w-full flex items-center justify-center gap-1 group text-xs uppercase mt-8">
                 <span class="group-hover:font-bold group-hover:border-b border-gray-800">View all</span>
                 <Icon name="material-symbols:arrow-right-alt" class="w-5 h-5 group-hover:scale-150 transition duration-700 ease-in-out" />
             </NuxtLink>

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full overflow-hidden relative">
+  <div class="w-full h-full overflow-y-auto relative">
     <header class="flex items-center justify-between border-b border-gray-100 shadow-sm h-20 px-6">
       <div class="w-full">
         <h2 class="text-2xl text-gray-700">All Client</h2>
@@ -178,39 +178,38 @@
                       <tr 
                         class="bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800 cursor-pointer"
                         v-for="client in clients" :key="client"
-                        @click="singleClientDetail(client)"
                       >
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block px-4 py-1">
+                          <NuxtLink :to="`/client/${client.id}`" class="block px-4 py-1">
                             <img :src="client.photo" class="w-16 h-16 rounded-xl" />
-                          </button>
+                          </NuxtLink>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block px-4 py-1">
+                          <NuxtLink :to="`/client/${client.id}`" class="block px-4 py-1">
                             <span class="block text-sm text-gray-800 dark:text-neutral-200">{{ client.fullName }}</span>
-                          </button>
+                          </NuxtLink>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block text-sm px-4 py-1">
+                          <NuxtLink :to="`/client/${client.id}`" class="block text-sm px-4 py-1">
                             {{client.email}}
-                          </button>
+                          </NuxtLink>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block px-4 py-1">
+                          <NuxtLink :to="`/client/${client.id}`" class="block px-4 py-1">
                             <span class="block text-sm text-gray-500 dark:text-neutral-500">
                               {{client.phone}}
                             </span>
-                          </button>
+                          </NuxtLink>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block px-4 py-1">
+                          <NuxtLink :to="`/client/${client.id}`" class="block px-4 py-1">
                             <span class="text-sm text-gray-600 dark:text-neutral-400">{{ client.address }}</span>
-                          </button>
+                          </NuxtLink>
                         </td>
                         <td class="size-px whitespace-nowrap align-center">
-                          <button class="block text-sm px-4 py-1">
+                          <NuxtLink :to="`/client/${client.id}`" class="block text-sm px-4 py-1">
                             {{ client.created_at }}
-                          </button>
+                          </NuxtLink>
                         </td>
                       </tr>
 

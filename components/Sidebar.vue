@@ -21,17 +21,17 @@
                   Loans
               </NuxtLink>
                 <div class="nested-link">
+                    <NuxtLink to="/loans/new" class="py-3 px-6 flex items-center gap-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-600 sidebar-link">
+                        <Icon name="hugeicons:save-money-dollar" class="w-5 h-5" />
+                        Add New Loan
+                    </NuxtLink>
                     <NuxtLink to="/loans" class="py-3 px-6 flex items-center gap-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-600 sidebar-link">
                         <Icon name="tabler:receipt-rupee" class="w-5 h-5" />
                         Loan History
                     </NuxtLink>
-                    <NuxtLink to="/" class="py-3 px-6 flex items-center gap-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-600 sidebar-link">
+                    <NuxtLink to="/loans/emi-entry" class="py-3 px-6 flex items-center gap-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-600 sidebar-link">
                         <Icon name="hugeicons:bubble-chat-delay" class="w-5 h-5" />
-                        Delayed EMI
-                    </NuxtLink>
-                    <NuxtLink to="/loans/new" class="py-3 px-6 flex items-center gap-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-600 sidebar-link">
-                        <Icon name="hugeicons:save-money-dollar" class="w-5 h-5" />
-                        Add New Loan
+                        EMI Entries
                     </NuxtLink>
                 </div>
 

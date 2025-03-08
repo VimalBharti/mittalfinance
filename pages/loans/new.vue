@@ -22,7 +22,6 @@
               Manage loan amount, tenure, interest, docs etc.
             </p>
           </div>
-
           <!-- Grid -->
           <div class="grid sm:grid-cols-12 gap-2 sm:gap-6 border-t pt-6">
             <div class="sm:col-span-3">
@@ -30,16 +29,16 @@
                 Select Client
               </label>
             </div>
-            <div class="sm:col-span-9">
+            <div class="sm:col-span-9 flex gap-1 items-center">
               <USelectMenu
                 searchable
                 searchable-placeholder="Search client..."
+                :search-attributes="['fullName', 'file_number']"
                 class="w-full"
                 placeholder="Select client..."
                 :options="clients"
                 option-attribute="fullName"
-                value-attribute="uid"
-                v-model="client_id"
+                v-model="selected_client"
               />
             </div>
             <!-- End Col -->
@@ -234,7 +233,7 @@
     return `${prefix}-${now.getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`
   }
 
-  const client_id = ref();
+  const selected_client = ref();
 
   const loanAmount = ref();
   const interestRate = ref() //Monthly interest rate (in %);
@@ -243,7 +242,6 @@
   const emiAmount = ref(0);
   const emiStartDate = ref();
   const lastEmiDate = ref();
-  const serialnumber = ref(generateSerial());
 
   const imageFile = ref(null)
   const imageUrl = ref('https://hozukjgrfvcuvdtakkte.supabase.co/storage/v1/object/public/website/avatar/avatar.png')
@@ -286,7 +284,7 @@
 
   let { data: clients, error } = await supabase
     .from('clients')
-    .select('fullName, uid')
+    .select('*')
   
 
   const addNewLoan = async () => {
@@ -297,8 +295,11 @@
       .from('loans')
       .insert([
         { 
-          client_id: client_id.value,
-          serial_number: serialnumber.value,
+          file_number: selected_client.value.file_number,
+          client_name: selected_client.value.fullName,
+          client_photo: selected_client.value.photo,
+          client_id: selected_client.value.id,
+
           loan_amount : loanAmount.value,
           interest_rate : interestRate.value,
           interest_amount_permonth : interest_amount_permonth.value,
@@ -316,7 +317,6 @@
       saveBtnColor.value = 'cyan';
 
       // Reset values
-      client_id.value = '';
       loanAmount.value = '';
       interestRate.value = ''
       interest_amount_permonth.value = ''
@@ -325,7 +325,7 @@
       emiStartDate.value = '';
       lastEmiDate.value = '';
       imageUrl.value = '';
-      serialnumber.value = ref(generateSerial());
+      selected_client.value = '';
 
   }
 
